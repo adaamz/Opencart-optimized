@@ -4,17 +4,14 @@ final class MySQL {
 	
 	public function __construct($hostname, $username, $password, $database) {
 		if (!$this->link = mysql_connect($hostname, $username, $password)) {
-      		trigger_error('Error: Could not make a database link using ' . $username . '@' . $hostname);
+                    trigger_error('Error: Could not make a database link using ' . $username . '@' . $hostname);
 		}
 
-    	if (!mysql_select_db($database, $this->link)) {
-      		trigger_error('Error: Could not connect to database ' . $database);
-    	}
+                if (!mysql_select_db($database, $this->link)) {
+                        trigger_error('Error: Could not connect to database ' . $database);
+                }
 		
-		mysql_query("SET NAMES 'utf8'", $this->link);
-		mysql_query("SET CHARACTER SET utf8", $this->link);
-		mysql_query("SET CHARACTER_SET_CONNECTION=utf8", $this->link);
-		mysql_query("SET SQL_MODE = ''", $this->link);
+		mysql_set_charset("utf8", $this->link);
   	}
 		
   	public function query($sql) {
@@ -55,25 +52,25 @@ final class MySQL {
 	
 	public function escape($value) {
 		if ($this->link) {
-			return mysql_real_escape_string($value, $this->link);
+                    return mysql_real_escape_string($value, $this->link);
 		}
 	}
 	
   	public function countAffected() {
 		if ($this->link) {
-    		return mysql_affected_rows($this->link);
+                    return mysql_affected_rows($this->link);
 		}
   	}
 
   	public function getLastId() {
 		if ($this->link) {
-    		return mysql_insert_id($this->link);
+                    return mysql_insert_id($this->link);
 		}
   	}	
 	
 	public function __destruct() {
 		if ($this->link) {
-			mysql_close($this->link);
+                    mysql_close($this->link);
 		}
 	}
 }
