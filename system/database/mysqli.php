@@ -21,9 +21,6 @@ final class MySQLi {
 		
 
 		if ($this->mysqli->errno) {
-		//$mysqli->errno
-		}
-		
 			if (is_resource($resource)) {
 				$i = 0;
     	
