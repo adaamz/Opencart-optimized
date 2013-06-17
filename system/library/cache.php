@@ -13,38 +13,36 @@ class Cache {
 			foreach ($files as $file) {
 				$time = substr(strrchr($file, '.'), 1);
 
-      			if ($time < time()) {
-					if (file_exists($file)) {
-						unlink($file);
-					}
-      			}
-    		}
+                            if ($time < time()) {
+                                if (is_file($file)) {
+                                    unlink($file);
+                                }
+                            }
+                        }
 			
 			return $data;			
 		}
 	}
 
   	public function set($key, $value) {
-    	$this->delete($key);
+            $this->delete($key);
 		
-		$file = DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $this->expire);
-    	
-		$handle = fopen($file, 'w');
+            $file = DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $this->expire);
 
-    	fwrite($handle, serialize($value));
-		
-    	fclose($handle);
+            $handle = fopen($file, 'w');
+            fwrite($handle, serialize($value));
+            fclose($handle);
   	}
 	
   	public function delete($key) {
 		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
 		
 		if ($files) {
-    		foreach ($files as $file) {
-      			if (file_exists($file)) {
-					unlink($file);
-				}
-    		}
+                    foreach ($files as $file) {
+                        if (is_file($file)) {
+                            unlink($file);
+                        }
+                    }
 		}
   	}
 }
